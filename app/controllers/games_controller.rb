@@ -23,14 +23,18 @@ class GamesController < ApplicationController
   def score
     @word = params[:word]
     grid = params[:grid]
+    session[:score] ||= 0
     if included?(@word, grid)
       if english_word?(@word)
-        @result = 'success'
+
+        @result = "Congratulations, #{@word.upcase} is a valid english word"
+        session[:score ]+=1
       else
-        @result = 'not english'
+        @result = "Sorry, but #{@word.upcase} does not seem to be a valid English word..."
       end
     else
-      @result = 'not possible'
+      @result = "Sorry, but can't build #{@word.upcase} with #{grid.upcase.split('').join(', ')}"
     end
+    @score = session[:score]
   end
 end
